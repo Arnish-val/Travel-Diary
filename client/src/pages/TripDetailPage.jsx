@@ -61,7 +61,7 @@ const TripDetailPage = () => {
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
+      style: 'mapbox://styles/mapbox/light-v11',
       center: [first.longitude, first.latitude],
       zoom: 4,
     });
@@ -74,11 +74,10 @@ const TripDetailPage = () => {
       const el = document.createElement('div');
       el.className = 'marker-dot';
       el.style.cssText = `
-        width: 14px; height: 14px;
-        background: #818cf8;
+        width: 16px; height: 16px;
+        background: #db3c8a;
         border: 2px solid white;
         border-radius: 50%;
-        box-shadow: 0 0 10px rgba(99,102,241,0.8);
       `;
 
       new mapboxgl.Marker(el)
@@ -111,8 +110,8 @@ const TripDetailPage = () => {
           source: 'route',
           layout: { 'line-join': 'round', 'line-cap': 'round' },
           paint: {
-            'line-color': '#6366f1',
-            'line-width': 3,
+            'line-color': '#db3c8a',
+            'line-width': 2.5,
             'line-dasharray': [2, 2],
           },
         });
@@ -256,7 +255,7 @@ const TripDetailPage = () => {
   return (
     <div className="trip-detail animate-fade-in">
       {/* Header Banner */}
-      <div className="trip-hero card">
+      <div className="trip-hero">
         {trip.cover_photo_url ? (
           <img className="trip-hero-img" src={trip.cover_photo_url} alt={trip.title} />
         ) : (
@@ -264,10 +263,10 @@ const TripDetailPage = () => {
         )}
         <div className="trip-hero-overlay">
           <div className="trip-hero-content">
-            <span className={`badge ${trip.privacy === 'public' ? 'badge-teal' : 'badge-brand'}`}>
+            <span className="badge badge-pink">
               {trip.privacy}
             </span>
-            <h1 className="trip-title display-text">{trip.title}</h1>
+            <h1 className="trip-title display-text display-white">{trip.title}</h1>
             <p className="trip-dates text-sm">{formattedDates}</p>
           </div>
           <div className="trip-hero-actions">
@@ -286,8 +285,8 @@ const TripDetailPage = () => {
         <div className="trip-main">
           {/* Notes / Description */}
           <div className="card text-card">
-            <h3>Diary Notes</h3>
-            <p className="trip-notes-text">
+            <h3 className="display-text" style={{ fontSize: '24px', marginBottom: '12px' }}>Diary Notes</h3>
+            <p className="trip-notes-text prose">
               {trip.description || <em className="text-muted">No diary entries or notes written for this trip yet. Click Edit to add some!</em>}
             </p>
           </div>
@@ -295,7 +294,7 @@ const TripDetailPage = () => {
           {/* Destinations Section */}
           <div className="card dest-list-card">
             <div className="dest-list-header">
-              <h3>Destinations visited</h3>
+              <h3 className="display-text" style={{ fontSize: '24px', margin: 0 }}>Destinations visited</h3>
               <div className="dest-search-wrap">
                 <input
                   id="add-dest-search"
@@ -334,7 +333,8 @@ const TripDetailPage = () => {
                         ⭐ Rate
                       </button>
                       <button
-                        className="btn btn-ghost btn-sm text-coral"
+                        className="btn btn-ghost btn-sm text-forest"
+                        style={{ fontWeight: 'bold' }}
                         onClick={() => handleRemoveDest(dest.id)}
                         id={`remove-dest-btn-${dest.name.toLowerCase().replace(' ', '-')}`}
                       >
@@ -352,7 +352,7 @@ const TripDetailPage = () => {
           {/* Media / Photos Section */}
           <div className="card media-card">
             <div className="media-header">
-              <h3>Trip Gallery</h3>
+              <h3 className="display-text" style={{ fontSize: '24px', margin: 0 }}>Trip Gallery</h3>
               <label className="btn btn-primary btn-sm btn-upload" id="upload-photo-label">
                 {uploading ? 'Uploading...' : '📷 Add Photo'}
                 <input
@@ -367,7 +367,7 @@ const TripDetailPage = () => {
 
             <div className="photos-grid">
               {media.map((photo) => (
-                <div key={photo.id} className="photo-item card">
+                <div key={photo.id} className="photo-item">
                   <img src={photo.thumbnail_url || photo.url} alt={photo.caption || 'Trip memory'} loading="lazy" />
                   <button className="photo-delete" onClick={() => handleDeletePhoto(photo.id)}>
                     ✕
@@ -387,7 +387,7 @@ const TripDetailPage = () => {
         {/* Sidebar: Map */}
         <div className="trip-sidebar">
           <div className="card map-card">
-            <h3>Trip Map</h3>
+            <h3 className="display-text" style={{ fontSize: '24px', marginBottom: '12px' }}>Trip Map</h3>
             <div className="trip-map-container" ref={mapContainer} />
           </div>
         </div>
@@ -398,7 +398,7 @@ const TripDetailPage = () => {
         <div className="modal-overlay">
           <div className="modal-content card animate-scale-in">
             <button className="modal-close" onClick={() => setActiveDestForRating(null)}>✕</button>
-            <h3 className="display-text">Rate {activeDestForRating.name}</h3>
+            <h3 className="display-text" style={{ fontSize: '30px', marginBottom: '20px' }}>Rate {activeDestForRating.name}</h3>
             <form onSubmit={handleSubmitRating} className="modal-form">
               <div className="form-group">
                 <label className="form-label">Score (1-5 Stars)</label>
@@ -462,49 +462,56 @@ const TripDetailPage = () => {
       )}
 
       <style>{`
-        .trip-hero { position: relative; height: 280px; overflow: hidden; display: flex; align-items: flex-end; margin-bottom: var(--space-6); border-radius: var(--radius-xl); }
+        .trip-hero { position: relative; height: 320px; overflow: hidden; display: flex; align-items: flex-end; margin-bottom: var(--space-8); }
         .trip-hero-img { width: 100%; height: 100%; object-fit: cover; }
-        .trip-hero-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 5rem; background: linear-gradient(135deg, var(--color-bg-elevated), var(--color-bg-secondary)); }
-        .trip-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,15,0.9) 0%, rgba(10,10,15,0.3) 70%, transparent 100%); display: flex; justify-content: space-between; align-items: flex-end; padding: var(--space-6); }
-        .trip-title { font-size: 2.2rem; margin-top: var(--space-2); text-shadow: var(--shadow-sm); }
-        .trip-dates { color: var(--text-secondary); margin-top: 4px; }
+        .trip-hero-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 5rem; background: var(--color-blush); color: var(--color-forest); }
+        .trip-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,82,45,0.7) 0%, rgba(0,82,45,0.2) 70%, transparent 100%); display: flex; justify-content: space-between; align-items: flex-end; padding: var(--space-6); }
+        .trip-title { font-size: clamp(30px, 5vw, 56px); margin: 0; line-height: 0.85; }
+        .trip-dates { color: var(--color-blush); margin-top: 8px; font-weight: 500; }
         .trip-hero-actions { display: flex; gap: var(--space-2); }
-        .trip-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: var(--space-6); }
-        .trip-main { display: flex; flex-direction: column; gap: var(--space-6); }
+        .trip-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: var(--space-10); }
+        .trip-main { display: flex; flex-direction: column; gap: var(--space-8); }
         .trip-sidebar { display: flex; flex-direction: column; }
-        .text-card { padding: var(--space-6); }
-        .trip-notes-text { line-height: 1.7; white-space: pre-wrap; font-size: 0.95rem; color: var(--text-secondary); }
-        .dest-list-card { padding: var(--space-6); }
-        .dest-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4); }
+        
+        .text-card { padding: var(--space-6); background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
+        .trip-notes-text { line-height: 1.7; white-space: pre-wrap; font-size: 16px; color: var(--color-forest); }
+        
+        .dest-list-card { padding: var(--space-6); background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
+        .dest-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5); flex-wrap: wrap; gap: var(--space-2); }
         .dest-search-wrap { position: relative; }
-        .dest-autocomplete-box { position: absolute; top: 100%; right: 0; background: var(--color-bg-card); border: 1px solid var(--border-default); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); z-index: 100; min-width: 200px; display: flex; flex-direction: column; max-height: 200px; overflow-y: auto; }
-        .dest-autocomplete-box button { background: none; border: none; padding: var(--space-3) var(--space-4); text-align: left; color: var(--text-primary); font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid var(--border-subtle); }
-        .dest-autocomplete-box button:hover { background: var(--glass-bg); }
-        .destinations-list { display: flex; flex-direction: column; gap: var(--space-2); }
-        .dest-item { display: flex; justify-content: space-between; align-items: center; padding: var(--space-3) var(--space-4); background: var(--color-bg-elevated); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); }
+        .dest-autocomplete-box { position: absolute; top: 100%; right: 0; background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); z-index: 100; min-width: 220px; display: flex; flex-direction: column; max-height: 200px; overflow-y: auto; }
+        .dest-autocomplete-box button { background: none; border: none; padding: var(--space-3) var(--space-4); text-align: left; color: var(--color-forest); font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 1px solid var(--border-subtle); }
+        .dest-autocomplete-box button:hover { background: var(--color-blush); }
+        .destinations-list { display: flex; flex-direction: column; gap: var(--space-3); }
+        .dest-item { display: flex; justify-content: space-between; align-items: center; padding: var(--space-4) var(--space-5); background: #fff; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); }
         .dest-number { margin-right: var(--space-2); }
-        .dest-item-actions { display: flex; gap: var(--space-1); }
-        .text-coral { color: var(--color-accent-coral) !important; }
-        .media-card { padding: var(--space-6); }
-        .media-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4); }
-        .photos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: var(--space-3); }
-        .photo-item { position: relative; height: 110px; overflow: hidden; border-radius: var(--radius-md); }
+        .dest-item-actions { display: flex; gap: var(--space-2); }
+        
+        .media-card { padding: var(--space-6); background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
+        .media-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5); }
+        .photos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-4); }
+        .photo-item { position: relative; height: 130px; overflow: hidden; border: 1px solid var(--border-subtle); }
         .photo-item img { width: 100%; height: 100%; object-fit: cover; }
-        .photo-delete { position: absolute; top: var(--space-1); right: var(--space-1); border-radius: 50%; width: 22px; height: 22px; background: rgba(0,0,0,0.6); border: none; color: white; display: flex; align-items: center; justify-content: center; font-size: 9px; cursor: pointer; }
-        .photo-caption { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.65); padding: 2px var(--space-2); text-overflow: ellipsis; white-space: nowrap; overflow: hidden; text-align: center; }
+        .photo-delete { position: absolute; top: var(--space-2); right: var(--space-2); border-radius: 50%; width: 26px; height: 26px; background: rgba(0,0,0,0.65); border: none; color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; }
+        .photo-caption { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.65); color: #fff; padding: 4px var(--space-2); text-overflow: ellipsis; white-space: nowrap; overflow: hidden; text-align: center; }
         .empty-photos { grid-column: 1 / -1; text-align: center; padding: var(--space-8) 0; }
-        .map-card { padding: var(--space-5); height: fit-content; }
-        .trip-map-container { height: 350px; border-radius: var(--radius-md); margin-top: var(--space-3); border: 1px solid var(--border-subtle); }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: var(--space-4); }
-        .modal-content { max-width: 440px; width: 100%; padding: var(--space-8); position: relative; }
-        .modal-close { position: absolute; top: var(--space-4); right: var(--space-4); background: none; border: none; font-size: 1.2rem; color: var(--text-muted); cursor: pointer; }
-        .modal-close:hover { color: var(--text-primary); }
-        .modal-form { display: flex; flex-direction: column; gap: var(--space-4); margin-top: var(--space-4); }
+        
+        .map-card { padding: var(--space-6); height: fit-content; background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
+        .trip-map-container { height: 380px; border-radius: var(--radius-md); margin-top: var(--space-4); border: 1px solid var(--border-subtle); }
+        
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,82,45,0.25); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: var(--space-4); }
+        .modal-content { max-width: 460px; width: 100%; padding: var(--space-8); position: relative; background: #fff; border: 1px solid var(--border-default); border-radius: var(--radius-xl); }
+        .modal-close { position: absolute; top: var(--space-4); right: var(--space-4); background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+        .modal-form { display: flex; flex-direction: column; gap: var(--space-5); margin-top: var(--space-5); }
         .modal-tags { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+        
+        .tag-chip { border: 1px solid var(--border-subtle); background: #fff; color: var(--color-forest); font-family: var(--font-grotesk); font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: var(--radius-full); cursor: pointer; transition: all var(--transition-fast); }
+        .tag-chip.active { background: var(--color-lipstick); color: #fff; border-color: var(--color-lipstick); }
+        .tag-chip:hover { border-color: var(--color-lipstick); }
+
         @media (max-width: 768px) {
-          .trip-grid { grid-template-columns: 1fr; }
-          .trip-hero { height: 200px; }
-          .trip-title { font-size: 1.6rem; }
+          .trip-grid { grid-template-columns: 1fr; gap: 40px; }
+          .trip-hero { height: 240px; }
         }
       `}</style>
     </div>

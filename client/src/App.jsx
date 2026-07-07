@@ -42,13 +42,15 @@ const App = () => {
         position="top-right"
         toastOptions={{
           style: {
-            background: '#1e1e2e',
-            color: '#f1f5f9',
-            border: '1px solid rgba(255,255,255,0.12)',
+            background: '#fff8f6',
+            color: '#00522d',
+            border: '1px solid #fce5df',
             borderRadius: '10px',
+            fontFamily: 'var(--font-grotesk)',
+            fontWeight: '500',
           },
-          success: { iconTheme: { primary: '#14b8a6', secondary: '#1e1e2e' } },
-          error:   { iconTheme: { primary: '#ef4444', secondary: '#1e1e2e' } },
+          success: { iconTheme: { primary: '#00522d', secondary: '#fff8f6' } },
+          error:   { iconTheme: { primary: '#db3c8a', secondary: '#fff8f6' } },
         }}
       />
       <PageShell>

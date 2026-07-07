@@ -3,7 +3,6 @@ import mapboxgl from 'mapbox-gl';
 import { useRequireAuth } from '@/hooks/useAuth';
 import * as tripsApi from '@/api/trips.api';
 
-// Note: Set your Mapbox public token in .env as VITE_MAPBOX_TOKEN
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
 
 const MapExplorerPage = () => {
@@ -30,7 +29,7 @@ const MapExplorerPage = () => {
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
+      style: 'mapbox://styles/mapbox/light-v11',
       center: [0, 20],
       zoom: 1.8,
       projection: 'globe',
@@ -39,14 +38,14 @@ const MapExplorerPage = () => {
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
     map.current.addControl(new mapboxgl.FullscreenControl(), 'top-right');
 
-    // Atmospheric glow on globe
+    // Atmospheric warm chalk glow on globe
     map.current.on('style.load', () => {
       map.current.setFog({
-        color: 'rgb(10, 10, 15)',
-        'high-color': 'rgb(30, 30, 50)',
-        'horizon-blend': 0.02,
-        'space-color': 'rgb(5, 5, 15)',
-        'star-intensity': 0.6,
+        color: '#fff8f6',
+        'high-color': '#fce5df',
+        'horizon-blend': 0.04,
+        'space-color': '#fff8f6',
+        'star-intensity': 0.0,
       });
     });
 
@@ -72,16 +71,16 @@ const MapExplorerPage = () => {
         el.innerHTML = '✈';
         el.style.cssText = `
           width: 32px; height: 32px;
-          background: linear-gradient(135deg, #6366f1, #4f46e5);
-          border: 2px solid rgba(255,255,255,0.3);
+          background: #db3c8a;
+          color: #fff;
+          border: 2px solid white;
           border-radius: 50%;
           display: flex; align-items: center; justify-content: center;
           font-size: 14px; cursor: pointer;
-          box-shadow: 0 0 20px rgba(99,102,241,0.5);
           transition: transform 150ms ease;
         `;
 
-        el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.3)'; });
+        el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.2)'; });
         el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
         el.addEventListener('click', () => setSelectedTrip(trip));
 
@@ -90,9 +89,9 @@ const MapExplorerPage = () => {
           .setPopup(
             new mapboxgl.Popup({ offset: 20, className: 'map-popup' })
               .setHTML(`
-                <div style="padding: 8px; color: #f1f5f9; background: #16161f; border-radius: 8px; min-width: 150px;">
-                  <strong>${trip.title}</strong><br/>
-                  <small style="color: #94a3b8;">${dest.name}, ${dest.country}</small>
+                <div style="padding: 10px; color: #00522d; background: #fff; border: 1px solid #fce5df; border-radius: 12px; min-width: 150px; font-family: sans-serif;">
+                  <strong style="display: block; font-size: 14px; margin-bottom: 2px;">${trip.title}</strong>
+                  <span style="color: rgba(0, 82, 45, 0.6); font-size: 12px;">${dest.name}, ${dest.country}</span>
                 </div>
               `)
           )
@@ -102,12 +101,14 @@ const MapExplorerPage = () => {
   }, [trips]);
 
   return (
-    <div className="map-page">
+    <div className="map-page animate-fade-in">
       <div className="map-header">
-        <h1 className="map-title">
-          <span className="gradient-text display-text">World Map</span>
+        <h1 className="map-title display-text display-pink" style={{ fontSize: '46px', margin: 0 }}>
+          World Map
         </h1>
-        <p className="map-subtitle text-muted">{trips.length} trips plotted</p>
+        <p className="map-subtitle text-muted" style={{ fontStyle: 'normal', fontWeight: '700', letterSpacing: '0.04em', fontSize: '12px', marginTop: '4px' }}>
+          {trips.length.toString().toUpperCase()} TRIPS PLOTTED
+        </p>
       </div>
 
       <div className="map-container" id="map-container" ref={mapContainer} />
@@ -119,25 +120,24 @@ const MapExplorerPage = () => {
             onClick={() => setSelectedTrip(null)}
             id="map-panel-close-btn"
           >✕</button>
-          <h3>{selectedTrip.title}</h3>
-          <p className="text-sm text-muted">
+          <h3 className="display-text display-pink" style={{ fontSize: '24px', margin: 0 }}>{selectedTrip.title}</h3>
+          <p className="text-xs text-muted" style={{ marginTop: '2px', fontWeight: '700' }}>
             {new Date(selectedTrip.start_date).toLocaleDateString()} –{' '}
             {new Date(selectedTrip.end_date).toLocaleDateString()}
           </p>
           {selectedTrip.description && (
-            <p className="text-sm mt-4">{selectedTrip.description}</p>
+            <p className="text-sm prose mt-4" style={{ color: 'var(--text-muted)' }}>{selectedTrip.description}</p>
           )}
         </div>
       )}
 
       <style>{`
-        .map-page { height: calc(100vh - var(--navbar-height)); display: flex; flex-direction: column; margin: calc(-1 * var(--space-8)); }
-        .map-header { padding: var(--space-6) var(--space-8) var(--space-4); }
-        .map-title { font-size: 1.8rem; margin-bottom: var(--space-1); }
-        .map-container { flex: 1; border-radius: 0; border-top: 1px solid var(--border-subtle); }
-        .map-trip-panel { position: absolute; bottom: var(--space-8); left: 50%; transform: translateX(-50%); min-width: 280px; padding: var(--space-5); z-index: 10; }
-        .panel-close { position: absolute; top: var(--space-3); right: var(--space-3); background: none; border: none; color: var(--text-muted); font-size: 1rem; cursor: pointer; }
-        .panel-close:hover { color: var(--text-primary); }
+        .map-page { height: calc(100vh - 40px); display: flex; flex-direction: column; margin: calc(-1 * var(--space-8)); position: relative; }
+        .map-header { padding: var(--space-6) var(--space-8) var(--space-4); background: var(--color-chalk); border-bottom: 1px solid var(--border-subtle); z-index: 10; }
+        .map-container { flex: 1; width: 100%; }
+        .map-trip-panel { position: absolute; bottom: var(--space-8); left: 50%; transform: translateX(-50%); min-width: 320px; max-width: 480px; padding: var(--space-6); z-index: 10; background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
+        .panel-close { position: absolute; top: var(--space-4); right: var(--space-4); background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
+        .panel-close:hover { color: var(--color-lipstick); }
       `}</style>
     </div>
   );

@@ -100,12 +100,12 @@ const AddEditTripPage = () => {
 
   return (
     <div className="add-edit-page animate-fade-in">
-      <div className="form-container card">
-        <h1 className="display-text gradient-text page-title">
+      <div className="form-container">
+        <h1 className="display-text display-pink page-title" style={{ fontSize: '46px', margin: 0 }}>
           {isEditMode ? 'Edit Trip' : 'Log New Trip'}
         </h1>
-        <p className="text-muted page-subtitle">
-          {isEditMode ? 'Update your trip details and privacy settings' : 'Record a new travel adventure'}
+        <p className="text-muted page-subtitle" style={{ marginTop: '4px' }}>
+          {isEditMode ? 'Update your trip details and privacy settings.' : 'Record a new travel adventure.'}
         </p>
 
         <form onSubmit={handleSubmit} className="trip-form" id="add-edit-trip-form" noValidate>
@@ -212,14 +212,12 @@ const AddEditTripPage = () => {
       </div>
 
       <style>{`
-        .add-edit-page { max-width: 680px; margin: 0 auto; }
-        .form-container { padding: var(--space-8); }
-        .page-title { font-size: 1.8rem; margin-bottom: var(--space-1); }
-        .page-subtitle { margin-bottom: var(--space-8); }
-        .trip-form { display: flex; flex-direction: column; gap: var(--space-5); }
+        .add-edit-page { max-width: 680px; margin: 0 auto; padding-top: var(--space-8); }
+        .form-container { display: flex; flex-direction: column; gap: var(--space-8); }
+        .trip-form { display: flex; flex-direction: column; gap: var(--space-5); margin-top: var(--space-4); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
         .form-actions { display: flex; gap: var(--space-3); margin-top: var(--space-4); }
-        .input-error { border-color: var(--color-accent-coral) !important; }
+        .input-error { border-color: var(--color-lipstick) !important; }
         @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
       `}</style>
     </div>

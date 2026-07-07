@@ -57,15 +57,14 @@ const SearchPage = () => {
   return (
     <div className="search-page animate-fade-in">
       <div className="search-header">
-        <h1 className="display-text gradient-text" style={{ fontSize: '2.2rem' }}>
+        <h1 className="display-text display-pink" style={{ fontSize: '46px', marginBottom: '8px' }}>
           Explore Destinations
         </h1>
-        <p className="text-muted">Discover places, read reviews, find your next adventure</p>
+        <p className="text-muted">Discover places, read reviews, and find your next adventure.</p>
       </div>
 
       <div className="search-controls">
         <div className="search-bar-wrap">
-          <span className="search-icon">🔍</span>
           <input
             id="destination-search-input"
             type="search"
@@ -112,8 +111,8 @@ const SearchPage = () => {
         </div>
       ) : (
         <>
-          <p className="results-count text-muted text-sm">
-            {total} destination{total !== 1 ? 's' : ''} found
+          <p className="results-count text-muted text-xs">
+            {total} DESTINATION{total !== 1 ? 'S' : ''} FOUND
           </p>
           <div className="results-grid">
             {results.map((dest) => (
@@ -121,30 +120,31 @@ const SearchPage = () => {
             ))}
           </div>
           {results.length === 0 && !loading && (
-            <div className="empty-state card" style={{ padding: 'var(--space-12)', textAlign: 'center' }}>
-              <p style={{ fontSize: '2.5rem' }}>🌐</p>
-              <h3>No destinations found</h3>
-              <p className="text-muted">Try a different search or remove some filters</p>
+            <div className="empty-state card" style={{ padding: 'var(--space-12)', textAlign: 'center', background: '#fff', border: '1px solid var(--border-subtle)' }}>
+              <p style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🌐</p>
+              <h3 className="display-text display-pink" style={{ fontSize: '24px', marginBottom: '8px' }}>No destinations found</h3>
+              <p className="text-muted prose" style={{ margin: '0 auto' }}>Try a different search query or clear some filters.</p>
             </div>
           )}
         </>
       )}
 
       <style>{`
-        .search-page { max-width: 1100px; margin: 0 auto; }
-        .search-header { margin-bottom: var(--space-8); }
-        .search-controls { background: var(--color-bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--space-5); margin-bottom: var(--space-6); }
-        .search-bar-wrap { position: relative; margin-bottom: var(--space-4); }
-        .search-icon { position: absolute; left: var(--space-4); top: 50%; transform: translateY(-50%); font-size: 1rem; pointer-events: none; }
-        .search-input { padding-left: 44px; font-size: 1rem; }
-        .filter-row { display: flex; align-items: flex-start; gap: var(--space-4); flex-wrap: wrap; }
+        .search-page { max-width: 1100px; margin: 0 auto; padding-top: var(--space-8); }
+        .search-header { border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--space-6); margin-bottom: var(--space-8); }
+        .search-controls { display: flex; flex-direction: column; gap: var(--space-4); margin-bottom: var(--space-8); }
+        .search-bar-wrap { width: 100%; }
+        .search-input { font-size: 1rem; }
+        .filter-row { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
         .tag-filters { display: flex; gap: var(--space-2); flex-wrap: wrap; flex: 1; }
-        .tag-chip { padding: 5px var(--space-3); border-radius: var(--radius-full); border: 1px solid var(--border-default); background: var(--color-bg-elevated); color: var(--text-secondary); font-size: 0.8rem; cursor: pointer; transition: all var(--transition-fast); }
-        .tag-chip:hover { border-color: var(--color-brand-500); color: var(--text-primary); }
-        .tag-chip.active { background: rgba(99,102,241,0.15); border-color: var(--color-brand-500); color: var(--color-brand-400); }
-        .rating-select { width: auto; min-width: 140px; padding: 6px var(--space-4); font-size: 0.85rem; }
-        .results-count { margin-bottom: var(--space-4); }
-        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-5); }
+        
+        .tag-chip { padding: 6px 14px; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); background: var(--color-blush); color: var(--color-forest); font-family: var(--font-grotesk); font-size: 13px; font-weight: 500; cursor: pointer; transition: all var(--transition-fast); }
+        .tag-chip:hover { border-color: var(--color-lipstick); }
+        .tag-chip.active { background: var(--color-lipstick); border-color: var(--color-lipstick); color: #fff; }
+        
+        .rating-select { width: auto; min-width: 160px; padding: 10px var(--space-4); font-size: 14px; background: #fff; border: 1px solid var(--border-subtle); cursor: pointer; }
+        .results-count { margin-bottom: var(--space-4); font-weight: 700; letter-spacing: 0.04em; }
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-6); }
       `}</style>
     </div>
   );
@@ -154,8 +154,8 @@ const DestinationCard = ({ dest }) => (
   <div className="dest-card card" id={`dest-card-${dest.id}`}>
     <div className="dest-card-header">
       <div>
-        <h3 className="dest-card-name">{dest.name}</h3>
-        <p className="dest-card-country text-sm text-muted">{dest.country}</p>
+        <h3 className="dest-card-name display-text" style={{ fontSize: '20px', margin: 0, textTransform: 'none' }}>{dest.name}</h3>
+        <p className="dest-card-country text-xs text-muted" style={{ marginTop: '2px' }}>{dest.country}</p>
       </div>
       <div className="dest-rating">
         <span className="rating-star">⭐</span>
@@ -164,15 +164,12 @@ const DestinationCard = ({ dest }) => (
       </div>
     </div>
     {dest.description && (
-      <p className="dest-desc text-sm text-muted">{dest.description}</p>
+      <p className="dest-desc text-sm prose" style={{ margin: 0, color: 'var(--text-muted)' }}>{dest.description}</p>
     )}
     <style>{`
-      .dest-card { padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); transition: transform var(--transition-fast); }
-      .dest-card:hover { transform: translateY(-2px); }
+      .dest-card { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); border: 1px solid var(--border-subtle); background: #fff; border-radius: var(--radius-lg); }
       .dest-card-header { display: flex; justify-content: space-between; align-items: flex-start; }
-      .dest-card-name { font-size: 1rem; font-weight: 600; }
-      .dest-rating { display: flex; align-items: center; gap: 3px; }
-      .rating-value { font-weight: 600; font-size: 0.9rem; }
+      .dest-rating { display: flex; align-items: center; gap: 4px; font-family: var(--font-grotesk); font-size: 14px; font-weight: 700; color: var(--color-forest); }
       .dest-desc { line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     `}</style>
   </div>

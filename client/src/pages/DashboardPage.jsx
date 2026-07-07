@@ -32,9 +32,9 @@ const DashboardPage = () => {
 
   const greeting = () => {
     const hr = new Date().getHours();
-    if (hr < 12) return 'Good morning';
-    if (hr < 18) return 'Good afternoon';
-    return 'Good evening';
+    if (hr < 12) return 'GOOD MORNING';
+    if (hr < 18) return 'GOOD AFTERNOON';
+    return 'GOOD EVENING';
   };
 
   if (loading) {
@@ -50,10 +50,10 @@ const DashboardPage = () => {
       {/* Header */}
       <div className="dashboard-header">
         <div>
-          <p className="dashboard-greeting">{greeting()},</p>
-          <h1 className="dashboard-title display-text">{user?.display_name} ✈</h1>
+          <p className="dashboard-greeting eyebrow">{greeting()},</p>
+          <h1 className="dashboard-title display-text display-pink">{user?.display_name} ✈</h1>
           {user?.home_location && (
-            <p className="dashboard-location">📍 {user.home_location}</p>
+            <p className="dashboard-location text-muted">📍 {user.home_location}</p>
           )}
         </div>
         <Link to="/trips/new" id="dashboard-new-trip-btn" className="btn btn-primary">
@@ -61,19 +61,16 @@ const DashboardPage = () => {
         </Link>
       </div>
 
-      {/* Stats */}
-      <div className="stats-grid">
+      {/* Stats - flat typographical layout, no cards, simple dividers */}
+      <div className="stats-row">
         {[
-          { icon: '🗺', label: 'Trips', value: trips.length },
-          { icon: '📸', label: 'Memories', value: trips.reduce((a, t) => a + (parseInt(t.media_count, 10) || 0), 0) },
-          { icon: '🌍', label: 'Destinations', value: trips.reduce((a, t) => a + (parseInt(t.destination_count, 10) || 0), 0) },
-        ].map((stat) => (
-          <div key={stat.label} className="stat-card card">
-            <span className="stat-icon">{stat.icon}</span>
-            <div>
-              <p className="stat-value">{stat.value}</p>
-              <p className="stat-label">{stat.label}</p>
-            </div>
+          { label: 'Trips logged', value: trips.length },
+          { label: 'Photos uploaded', value: trips.reduce((a, t) => a + (parseInt(t.media_count, 10) || 0), 0) },
+          { label: 'Places visited', value: trips.reduce((a, t) => a + (parseInt(t.destination_count, 10) || 0), 0) },
+        ].map((stat, i) => (
+          <div key={stat.label} className="stat-item">
+            <p className="stat-value display-text display-pink">{stat.value}</p>
+            <p className="stat-label-text">{stat.label}</p>
           </div>
         ))}
       </div>
@@ -81,15 +78,15 @@ const DashboardPage = () => {
       {/* Trips grid */}
       <div className="dashboard-section">
         <div className="section-header">
-          <h2 className="section-title">My Trips</h2>
+          <h2 className="section-title display-text" style={{ fontSize: '30px', margin: 0 }}>My Trips</h2>
           <Link to="/trips" className="btn btn-ghost btn-sm" id="view-all-trips-link">View all →</Link>
         </div>
 
         {trips.length === 0 ? (
           <div className="empty-state card">
             <p className="empty-icon">🧳</p>
-            <h3>No trips yet</h3>
-            <p className="text-muted">Start by logging your first adventure!</p>
+            <h3 className="display-text display-pink" style={{ fontSize: '24px', marginBottom: '8px' }}>No trips yet</h3>
+            <p className="text-muted prose" style={{ margin: '0 auto' }}>Start by logging your first adventure! Document destinations, photos, and ratings.</p>
             <Link to="/trips/new" id="empty-new-trip-btn" className="btn btn-primary mt-4">
               Log a trip
             </Link>
@@ -102,7 +99,7 @@ const DashboardPage = () => {
               ))}
             </div>
             {hasNext && (
-              <div style={{ textAlign: 'center', marginTop: 'var(--space-6)' }}>
+              <div style={{ textAlign: 'center', marginTop: 'var(--space-8)' }}>
                 <button
                   className="btn btn-secondary"
                   onClick={() => fetchTrips(cursor)}
@@ -117,25 +114,27 @@ const DashboardPage = () => {
       </div>
 
       <style>{`
-        .dashboard { max-width: 1100px; margin: 0 auto; }
+        .dashboard { max-width: 1100px; margin: 0 auto; padding-top: var(--space-8); }
         .dashboard-loading { display: flex; align-items: center; justify-content: center; height: 50vh; }
-        .dashboard-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: var(--space-8); flex-wrap: wrap; gap: var(--space-4); }
-        .dashboard-greeting { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px; }
-        .dashboard-title { font-size: 2rem; letter-spacing: -0.02em; }
-        .dashboard-location { color: var(--text-muted); font-size: 0.9rem; margin-top: var(--space-2); }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-bottom: var(--space-8); }
-        .stat-card { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-5); }
-        .stat-icon { font-size: 2rem; }
-        .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--text-primary); line-height: 1; }
-        .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
-        .dashboard-section {}
-        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-5); }
-        .section-title { font-size: 1.2rem; font-weight: 600; }
-        .trips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-5); }
-        .empty-state { text-align: center; padding: var(--space-12); }
+        .dashboard-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: var(--space-10); flex-wrap: wrap; gap: var(--space-4); border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--space-6); }
+        .dashboard-greeting { font-size: var(--text-xs2); font-weight: 700; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 0.08em; }
+        .dashboard-title { font-size: clamp(36px, 6vw, 56px); line-height: 0.8; }
+        .dashboard-location { font-family: var(--font-grotesk); font-size: 14px; margin-top: var(--space-3); }
+        
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); margin-bottom: var(--space-12); border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--space-8); }
+        .stat-item { display: flex; flex-direction: column; gap: 4px; }
+        .stat-value { font-size: clamp(46px, 8vw, 80px); line-height: 0.70; }
+        .stat-label-text { font-family: var(--font-grotesk); font-size: 13px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+        
+        .dashboard-section { margin-top: var(--space-6); }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-8); }
+        .trips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-8); }
+        .empty-state { text-align: center; padding: var(--space-12) var(--space-6); background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
         .empty-icon { font-size: 3rem; margin-bottom: var(--space-4); }
-        .empty-state h3 { font-size: 1.1rem; margin-bottom: var(--space-2); }
-        @media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) {
+          .stats-row { grid-template-columns: 1fr; gap: var(--space-6); }
+          .dashboard-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+        }
       `}</style>
     </div>
   );
@@ -151,32 +150,30 @@ const TripCard = ({ trip }) => (
           <span>✈</span>
         </div>
       )}
-      <span className={`trip-privacy badge ${trip.privacy === 'public' ? 'badge-teal' : 'badge-brand'}`}>
+      <span className="trip-privacy badge badge-brand">
         {trip.privacy}
       </span>
     </div>
     <div className="trip-card-body">
       <h3 className="trip-card-title">{trip.title}</h3>
-      <p className="trip-card-dates text-sm text-muted">
+      <p className="trip-card-dates text-xs text-muted">
         {format(new Date(trip.start_date), 'MMM d')} – {format(new Date(trip.end_date), 'MMM d, yyyy')}
       </p>
       <div className="trip-card-meta">
-        <span className="text-xs text-muted">📸 {trip.media_count || 0} photos</span>
-        <span className="text-xs text-muted">📍 {trip.destination_count || 0} places</span>
+        <span className="badge badge-ghost">📸 {trip.media_count || 0} photos</span>
+        <span className="badge badge-ghost">📍 {trip.destination_count || 0} places</span>
       </div>
     </div>
     <style>{`
-      .trip-card { display: flex; flex-direction: column; overflow: hidden; text-decoration: none; cursor: pointer; transition: transform var(--transition-fast), box-shadow var(--transition-fast); }
-      .trip-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg), var(--shadow-glow); }
-      .trip-card-cover { height: 160px; background: var(--color-bg-elevated); position: relative; overflow: hidden; }
-      .trip-card-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow); }
-      .trip-card:hover .trip-card-cover img { transform: scale(1.05); }
-      .trip-card-cover-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; background: linear-gradient(135deg, var(--color-bg-elevated), var(--color-bg-secondary)); }
-      .trip-privacy { position: absolute; top: var(--space-2); right: var(--space-2); }
-      .trip-card-body { padding: var(--space-4); }
-      .trip-card-title { font-size: 1rem; font-weight: 600; margin-bottom: var(--space-2); }
-      .trip-card-dates { margin-bottom: var(--space-3); }
-      .trip-card-meta { display: flex; gap: var(--space-4); }
+      .trip-card { display: flex; flex-direction: column; overflow: hidden; text-decoration: none; cursor: pointer; border: 1px solid var(--border-subtle); background: #fff; border-radius: var(--radius-lg); }
+      .trip-card-cover { height: 180px; position: relative; overflow: hidden; }
+      .trip-card-cover img { width: 100%; height: 100%; object-fit: cover; }
+      .trip-card-cover-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; background: var(--color-blush); color: var(--color-forest); }
+      .trip-privacy { position: absolute; top: var(--space-3); right: var(--space-3); }
+      .trip-card-body { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); }
+      .trip-card-title { font-family: var(--font-grotesk); font-size: 18px; font-weight: 700; color: var(--color-forest); line-height: 1.2; text-transform: none; }
+      .trip-card-dates { margin-bottom: 2px; }
+      .trip-card-meta { display: flex; gap: var(--space-2); margin-top: 4px; }
     `}</style>
   </Link>
 );

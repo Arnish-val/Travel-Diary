@@ -158,11 +158,18 @@ const PlanningPage = () => {
 
   return (
     <div className="planner-page animate-fade-in">
+      <div className="planner-header">
+        <h1 className="display-text display-pink" style={{ fontSize: '46px', marginBottom: '8px' }}>
+          Trip Planner
+        </h1>
+        <p className="text-muted">Draft upcoming itineraries and build live checklists.</p>
+      </div>
+
       <div className="planner-layout">
         {/* Left Column: List & Create Form */}
         <div className="planner-sidebar-panel">
           <div className="card plan-form-card">
-            <h3>Add Future Plan</h3>
+            <h3 className="display-text" style={{ fontSize: '20px', marginBottom: '12px' }}>Add Future Plan</h3>
             <form onSubmit={handleCreatePlan} className="plan-form" id="create-plan-form">
               <div className="form-group">
                 <input
@@ -195,42 +202,44 @@ const PlanningPage = () => {
                   onChange={(e) => setNewNotes(e.target.value)}
                 />
               </div>
-              <button type="submit" id="plan-submit-btn" className="btn btn-primary btn-sm w-full" disabled={creating}>
+              <button type="submit" id="plan-submit-btn" className="btn btn-primary w-full" disabled={creating}>
                 {creating ? 'Creating...' : 'Create Plan'}
               </button>
             </form>
           </div>
 
           <div className="plans-list">
-            <h3>Planned Trips</h3>
-            {plans.map((p) => (
-              <div
-                key={p.id}
-                onClick={() => handleSelectPlan(p.id)}
-                className={`plan-item card ${selectedPlan?.id === p.id ? 'active' : ''}`}
-                id={`plan-item-${p.id}`}
-              >
-                <div>
-                  <h4 className="plan-item-title">{p.title}</h4>
-                  <div className="plan-item-meta text-xs text-muted">
-                    {p.budget_cents ? `Budget: $${(p.budget_cents / 100).toLocaleString()}` : 'No budget set'}
-                  </div>
-                </div>
-                <button
-                  className="btn btn-ghost btn-sm text-coral delete-plan-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeletePlan(p.id);
-                  }}
-                  id={`delete-plan-btn-${p.id}`}
+            <h3 className="display-text" style={{ fontSize: '20px', marginBottom: '12px' }}>Planned Trips</h3>
+            <div className="plans-container">
+              {plans.map((p) => (
+                <div
+                  key={p.id}
+                  onClick={() => handleSelectPlan(p.id)}
+                  className={`plan-item card ${selectedPlan?.id === p.id ? 'active' : ''}`}
+                  id={`plan-item-${p.id}`}
                 >
-                  ✕
-                </button>
-              </div>
-            ))}
-            {plans.length === 0 && (
-              <p className="text-muted text-sm" style={{ padding: 'var(--space-4)' }}>No planned trips yet.</p>
-            )}
+                  <div style={{ flex: 1 }}>
+                    <h4 className="plan-item-title">{p.title}</h4>
+                    <div className="plan-item-meta text-xs text-muted">
+                      {p.budget_cents ? `Budget: $${(p.budget_cents / 100).toLocaleString()}` : 'No budget set'}
+                    </div>
+                  </div>
+                  <button
+                    className="btn btn-ghost btn-sm delete-plan-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeletePlan(p.id);
+                    }}
+                    id={`delete-plan-btn-${p.id}`}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+              {plans.length === 0 && (
+                <p className="text-muted text-sm" style={{ padding: 'var(--space-2)' }}>No planned trips yet.</p>
+              )}
+            </div>
           </div>
         </div>
 
@@ -240,10 +249,10 @@ const PlanningPage = () => {
             <div className="card plan-detail-card animate-scale-in">
               <div className="plan-detail-header">
                 <div>
-                  <h2>{selectedPlan.title}</h2>
+                  <h2 className="display-text display-pink" style={{ fontSize: '30px', margin: 0 }}>{selectedPlan.title}</h2>
                   {selectedPlan.budget_cents && (
-                    <p className="budget-tag text-sm text-accent">
-                      💵 Budget: ${(selectedPlan.budget_cents / 100).toLocaleString()}
+                    <p className="budget-tag text-xs text-muted" style={{ fontWeight: '700', marginTop: '4px' }}>
+                      💵 BUDGET: ${(selectedPlan.budget_cents / 100).toLocaleString()}
                     </p>
                   )}
                 </div>
@@ -251,8 +260,8 @@ const PlanningPage = () => {
 
               {selectedPlan.notes && (
                 <div className="plan-notes-box">
-                  <strong>Notes</strong>
-                  <p className="text-sm text-secondary">{selectedPlan.notes}</p>
+                  <strong className="text-xs" style={{ fontWeight: '700', letterSpacing: '0.04em' }}>NOTES</strong>
+                  <p className="text-sm prose" style={{ margin: 0, color: 'var(--text-body)' }}>{selectedPlan.notes}</p>
                 </div>
               )}
 
@@ -260,7 +269,7 @@ const PlanningPage = () => {
 
               {/* Checklist Section */}
               <div className="checklist-section">
-                <h3>Checklist</h3>
+                <h3 className="display-text" style={{ fontSize: '24px', marginBottom: '12px' }}>Checklist</h3>
                 <form onSubmit={handleAddChecklistItem} className="checklist-add-form" id="add-checklist-form">
                   <input
                     id="checklist-text-input"
@@ -292,7 +301,7 @@ const PlanningPage = () => {
                           </span>
                         </label>
                         <button
-                          className="btn btn-ghost btn-sm text-coral checklist-item-delete"
+                          className="btn btn-ghost btn-sm checklist-item-delete"
                           onClick={() => handleDeleteChecklistItem(item.id)}
                           id={`delete-checklist-item-btn-${item.id}`}
                         >
@@ -308,44 +317,45 @@ const PlanningPage = () => {
             </div>
           ) : (
             <div className="card select-placeholder">
-              <p style={{ fontSize: '3rem' }}>📋</p>
-              <h3>Select a plan</h3>
-              <p className="text-muted">Choose a planned trip from the sidebar to view notes and checklist.</p>
+              <p style={{ fontSize: '3rem', marginBottom: '16px' }}>📋</p>
+              <h3 className="display-text display-pink" style={{ fontSize: '24px', marginBottom: '8px' }}>Select a plan</h3>
+              <p className="text-muted prose">Choose a planned trip from the list to view notes and checklist.</p>
             </div>
           )}
         </div>
       </div>
 
       <style>{`
-        .planner-page { max-width: 1100px; margin: 0 auto; }
-        .planner-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--space-6); }
-        .planner-sidebar-panel { display: flex; flex-direction: column; gap: var(--space-6); }
-        .plan-form-card { padding: var(--space-5); }
-        .plan-form { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-3); }
-        .plans-list { display: flex; flex-direction: column; gap: var(--space-2); }
-        .plans-list h3 { margin-bottom: var(--space-2); }
-        .plan-item { padding: var(--space-4); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all var(--transition-fast); }
-        .plan-item:hover { border-color: var(--color-brand-400); background: var(--glass-bg); }
-        .plan-item.active { border-color: var(--color-brand-500); background: rgba(99,102,241,0.08); }
-        .plan-item-title { font-size: 0.95rem; font-weight: 600; }
-        .delete-plan-btn { padding: var(--space-2); opacity: 0; transition: opacity var(--transition-fast); }
-        .plan-item:hover .delete-plan-btn { opacity: 1; }
+        .planner-page { max-width: 1100px; margin: 0 auto; padding-top: var(--space-8); }
+        .planner-header { border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--space-6); margin-bottom: var(--space-8); }
+        .planner-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--space-10); }
+        .planner-sidebar-panel { display: flex; flex-direction: column; gap: var(--space-8); }
+        .plan-form-card { padding: var(--space-6); background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
+        .plan-form { display: flex; flex-direction: column; gap: var(--space-4); margin-top: var(--space-2); }
+        .plans-list { display: flex; flex-direction: column; gap: var(--space-3); }
+        .plans-container { display: flex; flex-direction: column; gap: var(--space-3); }
+        .plan-item { padding: var(--space-4) var(--space-5); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all var(--transition-fast); border: 1px solid var(--border-subtle); background: #fff; border-radius: var(--radius-md); }
+        .plan-item:hover { border-color: var(--color-lipstick); }
+        .plan-item.active { border-left: 4px solid var(--color-lipstick); border-color: var(--border-default); background: var(--color-blush); }
+        .plan-item-title { font-family: var(--font-grotesk); font-size: 16px; font-weight: 700; color: var(--color-forest); }
+        .delete-plan-btn { padding: var(--space-1); border-radius: 50%; color: var(--color-forest); }
+        .delete-plan-btn:hover { color: var(--color-lipstick); background: none; }
 
         .planner-detail-panel { min-height: 400px; }
-        .plan-detail-card { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+        .plan-detail-card { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-6); background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
         .plan-detail-header { display: flex; justify-content: space-between; align-items: flex-start; }
-        .budget-tag { margin-top: 4px; font-weight: 500; }
-        .plan-notes-box { background: var(--color-bg-elevated); padding: var(--space-4); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: var(--space-1); }
-        .checklist-add-form { display: flex; gap: var(--space-2); margin: var(--space-3) 0 var(--space-4); }
-        .checklist-list { display: flex; flex-direction: column; gap: var(--space-2); }
-        .checklist-row { display: flex; justify-content: space-between; align-items: center; padding: var(--space-2) var(--space-3); background: var(--color-bg-elevated); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); }
-        .checklist-label { display: flex; align-items: center; gap: var(--space-3); cursor: pointer; font-size: 0.9rem; flex: 1; }
-        .checklist-checkbox { width: 16px; height: 16px; accent-color: var(--color-brand-500); cursor: pointer; }
-        .checked-text { text-decoration: line-through; }
-        .checklist-item-delete { opacity: 0; padding: var(--space-1); }
-        .checklist-row:hover .checklist-item-delete { opacity: 1; }
-        .select-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 350px; text-align: center; }
-        @media (max-width: 768px) { .planner-layout { grid-template-columns: 1fr; } }
+        .plan-notes-box { background: var(--color-blush); padding: var(--space-5); border-radius: var(--radius-md); display: flex; flex-direction: column; gap: var(--space-2); }
+        .checklist-add-form { display: flex; gap: var(--space-3); margin: var(--space-3) 0 var(--space-4); }
+        .checklist-list { display: flex; flex-direction: column; gap: var(--space-3); }
+        .checklist-row { display: flex; justify-content: space-between; align-items: center; padding: var(--space-3) var(--space-4); background: #fff; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); }
+        .checklist-label { display: flex; align-items: center; gap: var(--space-3); cursor: pointer; font-family: var(--font-grotesk); font-size: 15px; color: var(--color-forest); flex: 1; }
+        .checklist-checkbox { width: 18px; height: 18px; accent-color: var(--color-lipstick); cursor: pointer; }
+        .checked-text { text-decoration: line-through; color: var(--text-muted); }
+        .checklist-item-delete { padding: var(--space-1); color: var(--color-forest); }
+        .checklist-item-delete:hover { color: var(--color-lipstick); background: none; }
+        
+        .select-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 350px; text-align: center; background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
+        @media (max-width: 768px) { .planner-layout { grid-template-columns: 1fr; gap: 40px; } }
       `}</style>
     </div>
   );
