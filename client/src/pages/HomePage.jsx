@@ -131,21 +131,32 @@ const HomePage = () => {
         },
       });
 
-      /* 5. Feature cards stagger */
-      gsap.fromTo('.feature-item', {
-        y: 50,
-        opacity: 0,
-      }, {
-        y: 0,
-        opacity: 1,
-        duration: 0.7,
-        stagger: 0.12,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: featuresRef.current,
-          start: 'top 70%',
-        },
+      /* 5. Feature cards 3D flip on scroll */
+      const cards = gsap.utils.toArray('.feature-item');
+      cards.forEach((card, idx) => {
+        gsap.fromTo(card, {
+          rotationX: 45, // tilt backward
+          rotationY: idx % 2 === 0 ? -12 : 12, // subtle twist
+          z: -80,
+          opacity: 0,
+          scale: 0.9,
+          transformOrigin: "top center",
+        }, {
+          rotationX: 0,
+          rotationY: 0,
+          z: 0,
+          opacity: 1,
+          scale: 1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 95%',
+            end: 'top 70%',
+            scrub: 0.8,
+          },
+        });
       });
+
 
       /* 6. Method steps slide in */
       gsap.fromTo('.method-step', {
@@ -788,21 +799,23 @@ const HomePage = () => {
         .features-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
-          gap: 0;
+          gap: 32px;
+          perspective: 1200px;
         }
         .feature-item {
-          padding: 48px 0;
-          border-bottom: 1px solid var(--color-blush);
-          padding-right: 60px;
+          background: #ffffff;
+          border: 1px solid var(--color-blush);
+          padding: 40px;
+          border-radius: var(--radius-lg);
+          transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+          transform-style: preserve-3d;
+          backface-visibility: hidden;
         }
-        .feature-item:nth-child(odd) {
-          border-right: 1px solid var(--color-blush);
-          padding-right: 60px;
+        .feature-item:hover {
+          border-color: var(--color-lipstick);
+          box-shadow: 0 16px 40px rgba(0, 82, 45, 0.05);
         }
-        .feature-item:nth-child(even) {
-          padding-left: 60px;
-          padding-right: 0;
-        }
+
         .feature-num {
           display: block;
           font-size: 80px !important;
@@ -1009,8 +1022,9 @@ const HomePage = () => {
           .manifesto-inner { gap: 48px; }
 
           .features-section { padding: var(--space-12) 24px; }
-          .features-grid { grid-template-columns: 1fr; }
-          .feature-item { border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; }
+          .features-grid { grid-template-columns: 1fr; gap: 20px; }
+          .feature-item { padding: 24px; }
+
 
           .method-section { padding: var(--space-12) 24px; }
           .method-step { grid-template-columns: 1fr; gap: 20px; padding: 40px 0; }
