@@ -1,0 +1,15 @@
+{
+  "name": "travel-diary",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Travel Diary & Discovery Platform",
+  "scripts": {
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "lint": "cd server && npm run lint && cd ../client && npm run lint"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
