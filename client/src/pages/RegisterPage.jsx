@@ -35,77 +35,172 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container animate-scale-in">
+    <div className="auth-page animate-fade-in">
+      <div className="auth-left">
+        {/* Giant ghosted headline */}
+        <p className="auth-ghost-title">JOIN<br/>US</p>
+      </div>
+
+      <div className="auth-right">
         <div className="auth-header">
-          <div className="auth-logo">🌍</div>
-          <h1 className="auth-title display-text">Start your journey</h1>
-          <p className="auth-subtitle">Create your Travel Diary account</p>
+          <p className="auth-eyebrow">Travel Diary</p>
+          <h1 className="auth-headline display-text display-pink">JOIN THE<br/>JOURNEY</h1>
+          <p className="auth-subline">Create your account to start logging adventures.</p>
         </div>
 
         <form onSubmit={handleSubmit} id="register-form" className="auth-form" noValidate>
           <div className="form-group">
             <label className="form-label" htmlFor="reg-name">Your name</label>
-            <input id="reg-name" type="text" name="display_name" autoComplete="name"
+            <input
+              id="reg-name"
+              type="text"
+              name="display_name"
+              autoComplete="name"
               className={`form-input ${errors.display_name ? 'input-error' : ''}`}
-              placeholder="Jane Doe" value={form.display_name} onChange={handleChange} />
+              placeholder="Jane Doe"
+              value={form.display_name}
+              onChange={handleChange}
+            />
             {errors.display_name && <span className="form-error">{errors.display_name}</span>}
           </div>
 
           <div className="form-group">
             <label className="form-label" htmlFor="reg-email">Email address</label>
-            <input id="reg-email" type="email" name="email" autoComplete="email"
+            <input
+              id="reg-email"
+              type="email"
+              name="email"
+              autoComplete="email"
               className={`form-input ${errors.email ? 'input-error' : ''}`}
-              placeholder="you@example.com" value={form.email} onChange={handleChange} />
+              placeholder="you@example.com"
+              value={form.email}
+              onChange={handleChange}
+            />
             {errors.email && <span className="form-error">{errors.email}</span>}
           </div>
 
           <div className="form-group">
             <label className="form-label" htmlFor="reg-password">Password</label>
-            <input id="reg-password" type="password" name="password" autoComplete="new-password"
+            <input
+              id="reg-password"
+              type="password"
+              name="password"
+              autoComplete="new-password"
               className={`form-input ${errors.password ? 'input-error' : ''}`}
-              placeholder="At least 8 characters" value={form.password} onChange={handleChange} />
+              placeholder="At least 8 characters"
+              value={form.password}
+              onChange={handleChange}
+            />
             {errors.password && <span className="form-error">{errors.password}</span>}
           </div>
 
           <div className="form-group">
             <label className="form-label" htmlFor="reg-location">Home city <span className="text-muted">(optional)</span></label>
-            <input id="reg-location" type="text" name="home_location"
-              className="form-input" placeholder="London, UK"
-              value={form.home_location} onChange={handleChange} />
+            <input
+              id="reg-location"
+              type="text"
+              name="home_location"
+              className="form-input"
+              placeholder="London, UK"
+              value={form.home_location}
+              onChange={handleChange}
+            />
           </div>
 
-          <button type="submit" id="register-submit-btn" className="btn btn-primary w-full" disabled={isLoading}>
+          <button
+            type="submit"
+            id="register-submit-btn"
+            className="btn btn-primary w-full"
+            disabled={isLoading}
+          >
             {isLoading ? <span className="spinner" /> : 'Create account'}
           </button>
         </form>
 
         <div className="auth-footer">
-          <p>Already have an account? <Link to="/login" id="register-login-link" className="auth-link">Sign in</Link></p>
+          <p>
+            Already have an account?{' '}
+            <Link to="/login" id="register-login-link" className="auth-link">Sign in →</Link>
+          </p>
         </div>
       </div>
 
-      <div className="auth-bg">
-        {['🌏', '🏕', '🚂', '🛳', '🌋'].map((emoji, i) => (
-          <span key={i} className="bg-emoji" style={{ '--delay': `${i * 0.6}s`, '--x': `${10 + i * 20}%` }}>{emoji}</span>
-        ))}
-      </div>
-
       <style>{`
-        .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: var(--space-6); background: radial-gradient(ellipse at 70% 30%, rgba(99,102,241,0.12) 0%, transparent 60%); }
-        .auth-container { width: 100%; max-width: 420px; background: var(--color-bg-card); border: 1px solid var(--border-default); border-radius: var(--radius-xl); padding: var(--space-8); box-shadow: var(--shadow-xl); position: relative; z-index: 1; }
-        .auth-header { text-align: center; margin-bottom: var(--space-6); }
-        .auth-logo { font-size: 2.5rem; margin-bottom: var(--space-3); display: block; }
-        .auth-title { font-size: 1.8rem; margin-bottom: var(--space-2); }
-        .auth-subtitle { color: var(--text-muted); font-size: 0.9rem; }
-        .auth-form { display: flex; flex-direction: column; gap: var(--space-4); }
-        .auth-footer { text-align: center; margin-top: var(--space-5); color: var(--text-muted); font-size: 0.9rem; }
-        .auth-link { color: var(--color-brand-400); font-weight: 500; }
-        .auth-link:hover { text-decoration: underline; }
-        .input-error { border-color: var(--color-accent-coral) !important; }
-        .auth-bg { position: absolute; inset: 0; pointer-events: none; }
-        .bg-emoji { position: absolute; font-size: 4rem; opacity: 0.06; top: 50%; left: var(--x); animation: floatEmoji 8s ease-in-out infinite; animation-delay: var(--delay); transform: translateY(-50%); }
-        @keyframes floatEmoji { 0%,100%{transform:translateY(-50%)}50%{transform:translateY(calc(-50% - 30px))} }
+        .auth-page {
+          min-height: 100vh;
+          background: var(--color-chalk);
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: center;
+          padding: 80px 60px;
+          gap: 60px;
+          position: relative;
+        }
+        .auth-left {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+        }
+        .auth-ghost-title {
+          font-family: var(--font-beni);
+          font-size: clamp(100px, 16vw, 200px);
+          font-weight: 700;
+          text-transform: uppercase;
+          line-height: 0.70;
+          color: var(--color-blush);
+          letter-spacing: -0.02em;
+          user-select: none;
+        }
+        .auth-right {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+          max-width: 420px;
+        }
+        .auth-eyebrow {
+          font-family: var(--font-grotesk);
+          font-size: 12px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: var(--text-muted);
+          margin-bottom: 8px;
+        }
+        .auth-headline {
+          font-size: clamp(60px, 8vw, 94px) !important;
+          line-height: 0.75 !important;
+          margin-bottom: 12px;
+        }
+        .auth-subline {
+          font-family: var(--font-grotesk);
+          font-size: 16px;
+          color: var(--text-muted);
+        }
+        .auth-form {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+        .auth-footer {
+          font-family: var(--font-grotesk);
+          font-size: 14px;
+          color: var(--text-muted);
+        }
+        .auth-link {
+          color: var(--color-lipstick);
+          font-weight: 500;
+          text-decoration: none;
+          border-bottom: 1px solid transparent;
+          transition: border-color 0.2s ease;
+        }
+        .auth-link:hover { border-color: var(--color-lipstick); }
+        .input-error { border-color: var(--color-lipstick) !important; }
+
+        @media (max-width: 768px) {
+          .auth-page { grid-template-columns: 1fr; padding: 80px 24px 40px; }
+          .auth-left { display: none; }
+          .auth-right { max-width: 100%; }
+        }
       `}</style>
     </div>
   );
